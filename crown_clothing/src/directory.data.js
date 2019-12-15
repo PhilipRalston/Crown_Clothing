@@ -32,5 +32,3 @@ const sections = [
     linkUrl: 'shop/mens'
   }
 ];
-
-export 
