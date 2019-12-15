@@ -3,13 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 
 import './App.css';
 
-import HomePage from '../src/pages/homepage/homepage.component';
-
-const HatsPage = () => (
-  <div>
-   <h1>HATS PAGE</h1>
-  </div>
-)
+import HomePage from './pages/homepage/homepage.component';
+import ShopPage from './pages/shop/shop.component';
 
 // component - component that will be rendered for a given (exact) path
 // path - string that is equal to the path itself (from the current place in our application) - base of application (root) = /
@@ -55,7 +50,7 @@ function App() {
     <div>
      <Switch>
       <Route exact path='/' component={HomePage}/>
-      <Route path='/hats' component={HatsPage}/>
+      <Route path='/shop' component={ShopPage}/>
      </Switch>
     </div>
   );
