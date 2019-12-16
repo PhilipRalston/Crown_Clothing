@@ -1,5 +1,7 @@
 import React from 'react';
 
+import CollectionItem from '../collection-item/collection-item.component';
+
 import './collection-preview.styles.scss';
 
 const CollectionPreview = ({ title, items }) => (
@@ -7,15 +9,13 @@ const CollectionPreview = ({ title, items }) => (
   <h1 className='title'>{title.toUpperCase()}</h1>
   <div className='preview'>
    {
-    // title of a given collection is destructured from otherCollectionProps that are passed into CollectionPreview and used for the title of said collection
-    // items array is also destructured from otherCollectionProps and for each collection, the corresponding items array is iterated through using the .map() method and each item has the specified function applied to it
-    // items array is filtered beforehand so only 4 items are featured within the items array before the .map() method is called
-    // each item consists of an id, name, imageUrl and price
-    // function basically says that from each item we want to use the id value as the <div> key and to display the name of the item between the <div> tags
     // This function call for our items array is called every time the CollectionPreview component is rendered or re-rendered - performance concern if array gets v.large or for slower computers
-    items.filter((item, idx) => idx < 4).map(item => (
-     <div key={item.id}>{item.name}</div>
+    items.filter((item, idx) => idx < 4).map(({ id, ...otherItemProps }) => (
+     <CollectionItem key={id} {...otherItemProps} />
     ))
+    // For items array (for each CollectionPreview component)
+    // Filter items array so that only four item objects are contained within said items array
+    // Then use map() to first destructure each item object into id and otherItemProps (via spread operator) and then generate a CollectionItem component based on these destructured values. otherItemProps passed into CollectionItem as props.
    }
   </div>
  </div>
