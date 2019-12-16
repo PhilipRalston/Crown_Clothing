@@ -5,6 +5,7 @@ import './App.css';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
+import Header from './components/header/header.component';
 
 // component - component that will be rendered for a given (exact) path
 // path - string that is equal to the path itself (from the current place in our application) - base of application (root) = /
@@ -48,6 +49,7 @@ import ShopPage from './pages/shop/shop.component';
 function App() {
   return (
     <div>
+     <Header/>
      <Switch>
       <Route exact path='/' component={HomePage}/>
       <Route path='/shop' component={ShopPage}/>
@@ -57,3 +59,6 @@ function App() {
 }
 
 export default App;
+
+// We place our Header component outside of our Switch and Route components
+// By doing this, our header is always present and rendered, despite whatever RRD (react-router-dom) Switch and Route components decide to render
