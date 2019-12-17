@@ -1,5 +1,8 @@
 import React from 'react';
 
+import FormInput from '../form-input/form-input.component';
+import CustomButton from '../custom-button/custom-button.component';
+
 import './sign-in.styles.scss';
 
 // For our sign-in and sign-up components we need to use class components rather than functional components. This is because we need to store and have access to the data that the user types in.
@@ -20,6 +23,7 @@ class SignIn extends React.Component {
   this.setState({ email: '', password: '' });
  }
  // By defining our handleSubmit method using an arrow function, the keyword this is bound to our class component SignIn - this allows us to use this.setState
+ // Throughout our class, this refers to the SignIn class
 
  handleChange = event => {
   const { value, name } = event.target;
@@ -32,27 +36,27 @@ class SignIn extends React.Component {
  render() {
   return (
     <div className='sign-in'>
-      <h2>I already have an account</h2>
-      <span>Sign in with your email and password</span>
+      <h2 className='title'>I already have an account</h2>
+      <span className='title'>Sign in with your email and password</span>
 
       <form onSubmit={this.handleSubmit}>
-        <input 
+        <FormInput 
         name="email" 
         type="email" 
         value={this.state.email}
-        onChange={this.handleChange}
+        handleChange={this.handleChange}
+        label="Email"
         required/>
-        <label>Email</label>
         
-        <input 
+        <FormInput
         name="password" 
         type="password" 
         value={this.state.password}
-        onChnage={this.handleChange}
+        handleChange={this.handleChange}
+        label="Password"
         required/>
-        <label>Password</label>
 
-        <input type="submit" value="Submit Form"/>
+        <CustomButton type='submit'>Sign In</CustomButton>
       </form>
     </div>
   );
