@@ -2,8 +2,10 @@ import React from 'react';
 
 import './custom-button.styles.scss';
 
-const CustomButton = ({ children, ...otherProps }) => (
- <button className='custom-button' {...otherProps}>
+// conditionally render a class name based off prop isGoogleSignIn - if isGoogleSignIn is true
+// custom-button class is always assigned
+const CustomButton = ({ children, isGoogleSignIn, ...otherProps }) => (
+ <button className={`${isGoogleSignIn ? 'google-sign-in': ''} custom-button`} {...otherProps}>
  {children}
  </button>
 );

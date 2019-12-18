@@ -3,6 +3,8 @@ import React from 'react';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
+import { signInWithGoogle } from '../../firebase/firebase.utils.js';
+
 import './sign-in.styles.scss';
 
 // For our sign-in and sign-up components we need to use class components rather than functional components. This is because we need to store and have access to the data that the user types in.
@@ -56,11 +58,17 @@ class SignIn extends React.Component {
         label="Password"
         required/>
 
-        <CustomButton type='submit'>Sign In</CustomButton>
+
+        <div className='buttons'>
+         <CustomButton type='submit'>Sign In</CustomButton>
+         <CustomButton onClick={signInWithGoogle} isGoogleSignIn>Sign In With Google</CustomButton>
+        </div>
       </form>
     </div>
   );
  }
 }
+
+// isGoogleSignIn - property will be passed a value of true if we do not assign a value to it - what we want
 
 export default SignIn;

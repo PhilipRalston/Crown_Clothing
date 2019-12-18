@@ -7,6 +7,7 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import Header from './components/header/header.component';
+import { auth } from './firebase/firebase.utils.js';
 
 // component - component that will be rendered for a given (exact) path
 // path - string that is equal to the path itself (from the current place in our application) - base of application (root) = /
@@ -47,17 +48,56 @@ import Header from './components/header/header.component';
 // Caveat of using location, history and match props (from Route) - we only get access to them from the first component that gets passed into our Route
 // Even though Directory and MenuItem are children of our HomePage component - only our HomePage component gets access to these props (because HomePage is what is passed into Route)
 // Possible soln: Pass props down into Directory and then into Menu Item - bad practice - prop tunnelling/drilling - tunnelling props through several intermediaries in order to get them to the required components - but intermediaries don't need the props themselves!
-function App() {
-  return (
+
+// we want to store the state of the user (re signing in to our application via email and password or via Google)
+// store it in state of App - we can then pass the information into components that need it
+// need App to be a class component rather than a functional component
+
+class App extends React.Component {  
+  constructor(){
+    super();
+
+    this.state = {
+      currentUser: null
+    }
+  }
+  
+  unsubscribeFromAuth = null
+  // New property/method for our App class
+
+  componentDidMount() {
+    // onAuthStateChanged is a method from the auth library that we get from Firebase
+    // inside this method it takes a function where the parameter is simply just what the user state/object is of the auth on our Firebase project
+    this.unsubscribeFromAuth = 
+    auth.onAuthStateChanged(user => {
+      // Gives us back a function that when we call it closes the subscription - close subscription whenever App component unmounts
+
+      // callback function is setState - setting current user to the user object
+      this.setState({ currentUser: user })
+    });
+    // console logging the user/state object
+    // we see that the user state/object contains details of the user who just signed in with Google
+    // see firebase.notes.js for much more info on Firebase Auth
+   
+  }
+  
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+// Our application now has Google Authentication Sign In as well as being able to listen to authentication state changes on our Firebase backend.
+
+  render() {
+    return (
     <div>
-     <Header/>
+     <Header currentUser={this.state.currentUser}/>
      <Switch>
       <Route exact path='/' component={HomePage}/>
       <Route path='/shop' component={ShopPage}/>
       <Route path='/signin' component={SignInAndSignUpPage}/>
      </Switch>
     </div>
-  );
+    );
+  }
 }
 
 export default App;
