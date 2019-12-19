@@ -20,6 +20,50 @@ const config = {
     measurementId: "G-ZM1KQ7BDQS"
   };
 
+  // function takes the user auth object that we get back from our auth library and then store it inside of our database
+  // going to be asynchronous function - API request - don't know how long the process is going to take
+  // we pass the userAuth object into this function along with any additional data we might need (in the form of an object)
+  // as we have seen, if we sign out - we get back null from our auth library instead of a userAuth object
+  // only want to perform this save to our database if we get a userAuth object back (i.e. they signed in/not that they signed out)
+  // function has to make sure that we check that we get back a valid object
+  export const createUserProfileDocument = async (userAuth, additionalData) => {
+    if (!userAuth) return;
+    // if userAuth object does not exist - exit the function, otherwise if it does exist - query inside of Firestore for the document to see if it already exists
+    // Firestore gives us back one of two different types of potential objects - we either get a QueryReference object or a QuerySnapshot object
+    // Query - asking Firestore for some document or collection
+    // See PDF for Part 88 of React Course resources
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+    // gives us a document reference object at the location of the uid of the userAuth object
+
+    const snapShot = await userRef.get();
+    // get a snapShot object (document snapshot) - can use this to tell if there is data present at the queried location (for said user) - have we stored the userAuth (object) before?
+    
+    if(!snapShot.exists) {
+      // if the user does not already exist in the database - we want to create a new entry in the users collection - using the userRef
+      // In order for us to create a new entry in our database we need to use documentRef objects (i.e. our userRef)
+      const { displayName, email } = userAuth;
+      // destructure the displayName and email from our userAuth object
+      const createdAt = new Date();
+      // current date when function was invoked (i.e. when user was added to the database)
+
+      try {
+        await userRef.set({
+          displayName,
+          email,
+          createdAt,
+          ...additionalData
+        })
+        // set = create (CRUD) - create a new entry in our database using the aforementioned data
+      } catch (error) {
+        console.log('error creating user', error.message);
+        // otherwise an error message will be logged to the console
+      }
+    }
+
+    return userRef;
+    // chance we may want to use this object later
+  } 
+
   firebase.initializeApp(config);
 
   export const auth = firebase.auth();

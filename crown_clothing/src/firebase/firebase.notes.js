@@ -19,3 +19,8 @@
     // Gives us the authenticated user object/state - calls the onAuthStateChanged method and passes in the user object
     // Don't have to manually fetch every time we want to check if the Auth state has changed - this connection is always open as long as our App component is mounted on our DOM
     // Because the subscription is open - we also have to close subscriptions when the component unmounts - don't want memory leaks within our application
+
+    // Storing User Data in Firebase - when we sign in with our Google Sign In, what we get back is this user authentication object that has a lot of properties on it that we don't actually want.
+    // All we need is displayName, email, uid (and possibly a phone number)
+    // uid - dynamically generated id string that Google made for us when we authenticated this user using the Google Sign In.
+    // We have to take this user auth object, figure out the properties we need and then store these in our database (Firestore) - into our users collection
