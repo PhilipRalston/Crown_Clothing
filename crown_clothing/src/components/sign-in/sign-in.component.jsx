@@ -3,7 +3,7 @@ import React from 'react';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { signInWithGoogle } from '../../firebase/firebase.utils.js';
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils.js';
 
 import './sign-in.styles.scss';
 
@@ -19,13 +19,25 @@ class SignIn extends React.Component {
   }
  }
 
- handleSubmit = event => {
+ handleSubmit = async event => {
   event.preventDefault();
+  
+  const { email, password } = this.state;
+  // email and password destructured off state
+
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    // attempt to sign user in with email and password
+    this.setState({ email: '', password: ''})
+    // after it succeeds - reset the state (and re-render and re-mount the component);
+  } catch (error) {
+    console.log(error);
+    // log error if failed
+  }
 
   this.setState({ email: '', password: '' });
  }
- // By defining our handleSubmit method using an arrow function, the keyword this is bound to our class component SignIn - this allows us to use this.setState
- // Throughout our class, this refers to the SignIn class
+ // reset the state - re-render component etc. 
 
  handleChange = event => {
   const { value, name } = event.target;
