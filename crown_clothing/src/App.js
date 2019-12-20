@@ -26,24 +26,35 @@ class App extends React.Component {
   // New property/method for our App class
 
   componentDidMount() {
-    // onAuthStateChanged is a method from the auth library that we get from Firebase
-    // inside this method it takes a function where the parameter is simply just the user authentication object
-    this.unsubscribeFromAuth = 
-    auth.onAuthStateChanged(async user => {
-      // Gives us back a function that when we call it closes the subscription - close subscription whenever App component unmounts
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // when app component is mounted on our DOM
+      // we add an observer that watches for changes to a user's sign in state
+      // when the sign in state changes (i.e. if someone signs in or out then we pass in the userAuth (user authentication object) into our async function)
+      if (userAuth) {
+        // if the userAuth object exists/is not null
+        const userRef = await createUserProfileDocument(userAuth);
+        // wait for userRef (document reference object) to be returned from our function
 
-      createUserProfileDocument(user);
-      // current users are now stored in the database - refreshing the page - componentDidMount will fire every time - auth always persists (app instances constantly communicating with Firebase - unless user signs out - remains signed in)
-      // still only got one user in our database after refreshing - no copies of data - this is because we check to see if the data at a given snapshot at a given user uid location exists or not.
+        userRef.onSnapshot(snapShot => {
+          // add listener for Document Snapshot object changes onto our userRef object - if there is a change then the snapShot object is taken and is used to update the state (currentUser value)
+          this.setState({
+            currentUser: {
+              id: snapShot.id,
+              ...snapShot.data()
+              // spread in remaining data from snapShot object - need to call .data() method to access data contained within SnapShot object
+            }
+          });
+        });
+      }
+      // otherwise currentUser is set to null - happens when user signs out/ no user is signed in
+      // remember when our state changes, our entire app will unmount from the DOM and our open subscription to user sign in changes will be closed. When our app component remounts the subscription is re-established.
+      this.setState({ currentUser: userAuth });
     });
-    // see firebase.notes.js for much more info on Firebase Auth
-   
   }
   
   componentWillUnmount() {
     this.unsubscribeFromAuth();
   }
-// Our application now has Google Authentication Sign In as well as being able to listen to authentication state changes on our Firebase backend.
 
   render() {
     return (

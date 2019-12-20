@@ -24,3 +24,13 @@
     // All we need is displayName, email, uid (and possibly a phone number)
     // uid - dynamically generated id string that Google made for us when we authenticated this user using the Google Sign In.
     // We have to take this user auth object, figure out the properties we need and then store these in our database (Firestore) - into our users collection
+
+      // current users are now stored in the database - refreshing the page - componentDidMount will fire every time - auth always persists (app instances constantly communicating with Firebase - unless user signs out - remains signed in)
+      // still only got one user in our database after refreshing - no copies of data - this is because we check to see if the data at a given snapshot at a given user uid location exists or not.
+
+      // snapshot object sent - represents current data in our database for given user reference object
+        
+        // Get documentSnapshot object from our documentReference object (using the .get() method on the documentReference object - like userRef.get() before)
+        // documentSnapshot object allows us to check if a document exists at this query using the .exists property which returns a boolean.
+        // We can also get the actual properties on the object by calling the .data() method, which returns us a JSON object of the document.
+        // the documentSnapshot object does not actually give us the data (we need to call the .data() method to see the data from our database - in our case, we get back the displayName, email and createdAt data that we used when we initially added the user to the database)

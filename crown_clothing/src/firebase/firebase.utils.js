@@ -59,7 +59,6 @@ const config = {
         // otherwise an error message will be logged to the console
       }
     }
-
     return userRef;
     // chance we may want to use this object later
   } 
