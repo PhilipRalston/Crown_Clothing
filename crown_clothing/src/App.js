@@ -9,7 +9,7 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils.js';
 
-// we want to store the state of the user (re signing in to our application via email and password or via Google)
+// we want to store the state of the user (re signing in to our application via email and password/ sign-up or via Google)
 // store it in state of App - we can then pass the information into components that need it
 // need App to be a class component rather than a functional component
 

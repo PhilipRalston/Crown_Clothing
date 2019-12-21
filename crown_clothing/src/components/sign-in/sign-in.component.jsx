@@ -29,7 +29,7 @@ class SignIn extends React.Component {
     await auth.signInWithEmailAndPassword(email, password);
     // attempt to sign user in with email and password
     this.setState({ email: '', password: ''})
-    // after it succeeds - reset the state (and re-render and re-mount the component);
+    // after it succeeds - reset the state (and re-render and re-mount the component) - creates user auth object
   } catch (error) {
     console.log(error);
     // log error if failed
