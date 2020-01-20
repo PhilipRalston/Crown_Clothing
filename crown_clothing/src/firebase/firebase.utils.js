@@ -10,14 +10,14 @@ import 'firebase/auth';
 // always need the base import though because the firebase keyword is going to give us access to firestore and auth when we import them in - they'll be automatically attached to this firebase keyword
 
 const config = {
-    apiKey: "AIzaSyA8u5VWUPJgn70WuAQ5ihBbvk_T1qYbnRE",
-    authDomain: "crown-db-3fbf8.firebaseapp.com",
-    databaseURL: "https://crown-db-3fbf8.firebaseio.com",
-    projectId: "crown-db-3fbf8",
-    storageBucket: "crown-db-3fbf8.appspot.com",
-    messagingSenderId: "1021823032292",
-    appId: "1:1021823032292:web:bbb645a3d9a54cb08a05f1",
-    measurementId: "G-ZM1KQ7BDQS"
+    apiKey: "AIzaSyAgKxncrIT0iVM0jtMcwWu1tnUE6nNQ0xA",
+    authDomain: "crown-db-c7806.firebaseapp.com",
+    databaseURL: "https://crown-db-c7806.firebaseio.com",
+    projectId: "crown-db-c7806",
+    storageBucket: "crown-db-c7806.appspot.com",
+    messagingSenderId: "572170552314",
+    appId: "1:572170552314:web:84ab0554d77d3bf1ef1a43",
+    measurementId: "G-WXRDVMQZFK"
   };
 
   // function takes the user auth object that we get back from our auth library and then store it inside of our database
@@ -28,7 +28,7 @@ const config = {
   // function has to make sure that we check that we get back a valid object
   export const createUserProfileDocument = async (userAuth, additionalData) => {
     if (!userAuth) return;
-    // if userAuth object does not exist - exit the function, otherwise if it does exist - query inside of Firestore for the document to see if it already exists
+    // if userAuth object does not exist/is null - exit the function, otherwise if it does exist - query inside of Firestore for the document to see if it already exists
     // Firestore gives us back one of two different types of potential objects - we either get a QueryReference object or a QuerySnapshot object
     // Query - asking Firestore for some document or collection
     // See PDF for Part 88 of React Course resources

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import './App.css';
 
@@ -8,24 +9,14 @@ import ShopPage from './pages/shop/shop.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import Header from './components/header/header.component';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils.js';
-
-// we want to store the state of the user (re signing in to our application via email and password/ sign-up or via Google)
-// store it in state of App - we can then pass the information into components that need it
-// need App to be a class component rather than a functional component
+import { setCurrentUser } from './redux/user/user.actions.js';
 
 class App extends React.Component {  
-  constructor(){
-    super();
-
-    this.state = {
-      currentUser: null
-    }
-  }
-  
   unsubscribeFromAuth = null
-  // New property/method for our App class
 
   componentDidMount() {
+    const {setCurrentUser} = this.props;
+
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       // when app component is mounted on our DOM
       // we add an observer that watches for changes to a user's sign in state
@@ -36,19 +27,14 @@ class App extends React.Component {
         // wait for userRef (document reference object) to be returned from our function
 
         userRef.onSnapshot(snapShot => {
-          // add listener for Document Snapshot object changes onto our userRef object - if there is a change then the snapShot object is taken and is used to update the state (currentUser value)
-          this.setState({
-            currentUser: {
+          setCurrentUser({
               id: snapShot.id,
               ...snapShot.data()
               // spread in remaining data from snapShot object - need to call .data() method to access data contained within SnapShot object
-            }
-          });
+            });
         });
       }
-      // otherwise currentUser is set to null - happens when user signs out/ no user is signed in
-      // remember when our state changes, our entire app will unmount from the DOM and our open subscription to user sign in changes will be closed. When our app component remounts the subscription is re-established.
-      this.setState({ currentUser: userAuth });
+      setCurrentUser(userAuth);
     });
   }
   
@@ -59,7 +45,7 @@ class App extends React.Component {
   render() {
     return (
     <div>
-     <Header currentUser={this.state.currentUser}/>
+     <Header/>
      <Switch>
       <Route exact path='/' component={HomePage}/>
       <Route path='/shop' component={ShopPage}/>
@@ -70,7 +56,15 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
 
-// We place our Header component outside of our Switch and Route components
-// By doing this, our header is always present and rendered, despite whatever RRD (react-router-dom) Switch and Route components decide to render
+export default connect(null, mapDispatchToProps)(App);
+// connect our App to the store - setCurrentUser (an action object creator function that we defined in user.actions.js) is imported into App.js
+// The function is then used to create an action object (that sets the current user)
+// dispatch is a function of the Redux store. You call store.dispatch to dispatch an action. This is the only way to trigger a state change.
+// With React Redux, your components never access the store directly - connect does it for you. React Redux gives you two ways to let components dispatch actions:
+// 1. By default, a connected component receives props.dispatch and can dispatch actions itself.
+// 2. connect can accept an argument called mapDispatchToProps, which lets you create functions that dispatch when called, and pass those functions as props to your component.
+
