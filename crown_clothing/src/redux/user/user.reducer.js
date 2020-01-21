@@ -1,3 +1,5 @@
+import { UserActionTypes } from './user.types.js';
+
 // when we initialize the state for the first time - nothing - Redux doesn't know that we have any state when the app first initializes
 // need to set initial state when app first initializes/mounts on our DOM for the first time (like this.state for our App component currently - we specify an initial state)
 const INITIAL_STATE = {
@@ -13,7 +15,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
    // if the case of action.type is something we want - render something - otherwise by default just return the state (state remains unchanged)
    // remember - ever single reducer gets every single action that ever gets fired (even if those actions are not related to the reducer)
    // by default we return the state because if none of the action types match then we just want to return the state and not modify it
-   case 'SET_CURRENT_USER':
+   case UserActionTypes.SET_CURRENT_USER:
     // whenever fired action type is SET_CURRENT_USER
     return {
      // return a new object - represents the new state that our user reducer is going to transform into
