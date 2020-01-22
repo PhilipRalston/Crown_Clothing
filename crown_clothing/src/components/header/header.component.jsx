@@ -5,14 +5,17 @@ import { connect } from 'react-redux';
 // HOC are functions that take components as arguments and return a new 'super powered' component
 
 import { auth } from '../../firebase/firebase.utils';
+import CartIcon from '../cart-icon/cart-icon.component';
+import CartDropDown from '../cart-dropdown/cart-dropdown.component';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 // ReactComponent as Logo is a special syntax in React for importing SVG.
 
 import './header.styles.scss';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
-
-const Header = ({ currentUser }) => (
+// destructure currentUser and hidden from this.props
+const Header = ({ currentUser, hidden }) => (
  <div className='header'>
    <Link className='logo-container' to='/'>
     <Logo className='logo'/>
@@ -24,18 +27,25 @@ const Header = ({ currentUser }) => (
       // If currentUser is an object then we will render a <div> - true
       // If false is returned - currentUser is not an object (i.e. null) - renders a <Link>
       currentUser ?
-      <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div> : <Link className='option' to='/signin'>SIGN IN</Link>
+      (<div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>) : (<Link className='option' to='/signin'>SIGN IN</Link>)
     }
+    <CartIcon/>
    </div>
+   {hidden ? null : <CartDropdown/>
+  //  If the hidden value is true then we want to render nothing. If it is false we want to render our CartDropdown component
+   }
  </div>
 );
 
 // Function that allows us to access the state (Root Reducer) - Root Reducer is an object that has a property of user whose value points to our user reducer
 // Currently this user reducer object is set to our initial state (currentUser: null) - haven't triggered any actions to update this value
 
-const mapStateToProps = state => ({
+const mapStateToProps = ({user: { currentUser }, cart: { hidden }}) => ({
+  // Destructuring syntax for nested values
   // While you can give the argument any name you want, calling it store would be incorrect - it's the 'state value', not the 'store instance'
-  currentUser: state.user.currentUser
+  currentUser,
+  hidden
+  // Our header component now has access to both currentUser and hidden (and their respective values) as props
 });
 
 export default connect(mapStateToProps)(Header);

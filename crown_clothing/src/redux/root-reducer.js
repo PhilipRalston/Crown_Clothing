@@ -8,9 +8,11 @@
 import { combineReducers } from 'redux';
 // from redux library
 import userReducer from './user/user.reducer';
+import cartReducer from './cart/cart.reducer';
 
 export default combineReducers({
- user: userReducer
+ user: userReducer,
+ cart: cartReducer
 });
 
 // Remember - our full state in Redux is just one big JSON object - the keys (e.g. user) that represent the individual slices of state (i.e. the actual reducers) are the actual individual reducers that we've wrote
