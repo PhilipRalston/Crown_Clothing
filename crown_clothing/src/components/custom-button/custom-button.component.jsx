@@ -4,8 +4,8 @@ import './custom-button.styles.scss';
 
 // conditionally render a class name based off prop isGoogleSignIn - if isGoogleSignIn is true
 // custom-button class is always assigned
-const CustomButton = ({ children, isGoogleSignIn, ...otherProps }) => (
- <button className={`${isGoogleSignIn ? 'google-sign-in': ''} custom-button`} {...otherProps}>
+const CustomButton = ({ children, isGoogleSignIn, inverted, ...otherProps }) => (
+ <button className={`${inverted ? 'inverted' : ''} ${isGoogleSignIn ? 'google-sign-in': ''} custom-button`} {...otherProps}>
  {children}
  </button>
 );
